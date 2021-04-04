@@ -4,7 +4,7 @@ const { Workout, Exercise } = require('../../model');
 //for getLastWorkout()
 router.get('/', (req,res) => {
   Workout.find({})
-  // .populate("exercises").exec()
+  // .populate("exercises")
   .then(data => {
     res.json(data)
   })
@@ -41,40 +41,24 @@ router.post("/", ({ body }, res) => {
     })
     .catch(err => {
       res.json(err);
-      console.log(err)
+      console.log("create workout error is " + err)
     });
 });
 
 // for 'addExercise(data)'
-router.put('/:id', (req,res) => {
-  Exercise.create(req.body)
-    .then(console.log(req.params))
-    .then(({ _id }) => Workout.findOneAndUpdate({ _id: req.params.id }, { $push: { exercise: _id } }, { new: true }))
-    .then(data => {
-      console.log(data)
-      res.json(data);
-    })
-    .catch(err => {
-      res.json(err);
-      console.log("addexercise error is: " + err)
-    });
-})
+router.put('/:id', ({ body, params }, res) => {
+  console.log('line 50 says exercise data is ' + body)
 
-// router.delete('/:id', async (req,res) => {
-//   try {
-//       const delBlog  = await Blog.destroy({
-//           where: {
-//           id: req.body.id
-//       },
-//   });
-//   if (!delBlog) {
-//       res.status(404).json({ message: 'No blog found with that id!' });
-//       return;
-//   }
-//   res.status(200).json(delBlog);
-//   } catch (err) {
-//   res.status(500).json(err);
-//   }
-// });
+  Exercise.create(body)
+  .then(({ _id }) => Workout.findOneAndUpdate({_id: params.id}, { $push: { exercises: _id } }, { new: true }))
+  .then(data => {
+    res.json(data);
+    console.log('line 56 says data is ' + data)
+  })
+  .catch(err => {
+    res.json(err);
+    console.log('error on line 60 says ' + err)
+  });
+})
 
 module.exports = router;
