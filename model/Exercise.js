@@ -9,6 +9,9 @@ const ExerciseSchema = new Schema({
   name: {
     type: String
   },
+  distance: {
+    type: Number
+  },
   duration: {
     type: Number
   },
