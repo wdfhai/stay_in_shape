@@ -4,31 +4,28 @@ const { Workout, Exercise } = require('../../model');
 //for getLastWorkout()
 router.get('/', (req,res) => {
   Workout.find({})
-  // .populate("exercises")
+  .populate('exercises')
   .then(data => {
     res.json(data)
+    console.log('getAll with populate shows ' + data)
   })
   .catch(err => {
     res.json(err);
-    console.log("getlastworkout data " + err)
+    console.log("getlastworkout data error " + err)
   });
 });
 
 //for getWorkoutsInRange()
 router.get('/range', (req,res) => {
-  Workout.find({
-    where: {
-      range: req.params.range,
-    }
-  })
-  // .populate("exercise")
+  Workout.find({})
+  .populate('exercises')
   .then(data => {
-    console.log(data)
-    // res.json(data);
+    res.json(data)
+    console.log('getAllInRange with populate shows ' + data)
   })
   .catch(err => {
     res.json(err);
-    console.log("get workoutsinrange data " + err)
+    console.log("getAllInRange data error " + err)
   });
 });
 
@@ -60,5 +57,6 @@ router.put('/:id', ({ body, params }, res) => {
     console.log('error on line 60 says ' + err)
   });
 })
+
 
 module.exports = router;
