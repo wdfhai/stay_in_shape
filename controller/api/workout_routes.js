@@ -16,17 +16,53 @@ router.get('/', (req,res) => {
 });
 
 //for getWorkoutsInRange()
-router.get('/range', (req,res) => {
-  Workout.find({})
-  .populate('exercises')
+router.get("/range", async (req,res) => {
+  // const results = await Workout.find({})
+  // .populate("exercises")
+  // .then(data => {    
+  //   console.log("getAllInRange with populate shows " + data)
+  //   return data
+  // })
+  // .catch(err => {
+  //   res.json(err);
+  //   console.log("getAllInRange data error " + err)
+  // });
+  // console.log("results shows " + JSON.stringify(results, null, 4))
+
+  const results2 = await Workout.aggregate([
+    { $lookup: {
+      from: "exercises",
+      localField: "exercises",
+      foreignField: "_id",
+      as: "exercises_details"
+    }},
+    { "$addFields": {
+        "totalDuration": {
+          "$sum": "$exercises_details.duration"
+        },
+        "totalWeight": {
+          "$sum": "$exercises_details.weight"
+        }
+    }},
+  ])
   .then(data => {
-    res.json(data)
-    console.log('getAllInRange with populate shows ' + data)
+    console.log("Aggregate with lookup and addFields shows " + JSON.stringify(data, null, 4))
+    return res.json(data)
   })
   .catch(err => {
     res.json(err);
     console.log("getAllInRange data error " + err)
-  });
+  })
+  // console.log("Aggregate + addFields method shows " + JSON.stringify(results2, null, 4));
+
+  // const results3 = await Workout.updateMany([
+  //     { "$set": {
+  //       "totalDuration": {
+  //         "$sum": "$exercises_details.duration"
+  //       }
+  //     }},
+  //   ]);
+  // console.log("updateMany shows " + JSON.stringify(results3, null, 4));
 });
 
 //for createWorkout()

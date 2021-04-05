@@ -22,11 +22,14 @@ function generatePalette() {
 }
 
 function populateChart(data) {
-  // let durations = data.map(({ totalDuration }) => totalDuration); 
-  ////////////
-  let durations = calculateTotalDuration(data);
-  ////////////
-  let pounds = calculateTotalWeight(data);
+  console.log(data);
+
+  let durations = data.map(({ totalDuration }) => totalDuration); //pulls duration data from back end
+  // let pounds = data.map(({ totalWeight }) => totalWeight);    //pulls weight data from back end
+ 
+  // let durations = calculateTotalDuration(data); //pulls duration data from front end (enable function below)
+  let pounds = calculateTotalWeight(data);     //pulls weight data from front end (enable function below)
+
   let workouts = workoutNames(data);
   const colors = generatePalette();
 
@@ -171,7 +174,7 @@ function populateChart(data) {
       title: {
         display: true,
         text: 'Exercises Performed',
-      },
+      }, 
     },
   });
 }
@@ -180,7 +183,7 @@ function calculateTotalWeight(data) {
   let totals = [];
 
   data.forEach((workout) => {
-    const workoutTotal = workout.exercises.reduce((total, { type, weight }) => {
+    const workoutTotal = workout.exercises_details.reduce((total, { type, weight }) => {
       if (type === 'resistance') {
         return total + weight;
       } else {
@@ -194,31 +197,31 @@ function calculateTotalWeight(data) {
   return totals;
 }
 
-/////////////////
-function calculateTotalDuration(data) {
-  let totals = [];
+// /////////////////
+// function calculateTotalDuration(data) {
+//   let dtotals = [];
 
-  data.forEach((workout) => {
-    const workoutTotal = workout.exercises.reduce((total, { type, duration }) => {
-      if (type === 'cardio') {
-        return total + duration;
-      } else {
-        return total;
-      }
-    }, 0);
+//   data.forEach((dworkout) => {
+//     const dworkoutTotal = dworkout.exercises.reduce((dtotal, { type, duration }) => {
+//       if (type === 'cardio') {
+//         return dtotal + duration;
+//       } else {
+//         return dtotal;
+//       }
+//     }, 0);
 
-    totals.push(workoutTotal);
-  });
+//     dtotals.push(dworkoutTotal);
+//   });
 
-  return totals;
-}
-////////////////
+//   return dtotals;
+// }
+// ////////////////
 
 function workoutNames(data) {
   let workouts = [];
 
   data.forEach((workout) => {
-    workout.exercises.forEach((exercise) => {
+    workout.exercises_details.forEach((exercise) => {
       workouts.push(exercise.name);
     });
   });
