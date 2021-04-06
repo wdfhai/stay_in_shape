@@ -22,12 +22,8 @@ function generatePalette() {
 }
 
 function populateChart(data) {
-  console.log('Data coming into populateChart is ' + JSON.stringify(data, null, 4));
-
   let durations = data.map(({ totalDuration }) => totalDuration);
-  console.log('durations array contains ' + durations)
   let pounds = calculateTotalWeight(data);
-  console.log('pounds array contains ' + pounds)
   let workouts = workoutNames(data);
   const colors = generatePalette();
 
@@ -204,9 +200,8 @@ function workoutNames(data) {
       workouts.push(exercise.name);
     });
   });
-  console.log('workout names are ' + workouts)
-  // return de-duplicated array with JavaScript `Set` object
-  return [...new Set(workouts)];
+
+  return workouts;
 }
 
 // get all workout data from back-end

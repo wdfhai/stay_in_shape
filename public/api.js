@@ -11,8 +11,6 @@ const API = {
   },
 
   async addExercise(workoutData) {
-    let a = JSON.stringify(workoutData)
-
     const id = location.search.split("=")[1];
 
     const res = await fetch("/api/workouts/" + id, {

@@ -1,6 +1,6 @@
 async function initWorkout() {
   const lastWorkout = await API.getLastWorkout();
-  console.log("Last workout:", lastWorkout);
+  console.log("Last workout data shows " +  JSON.stringify(lastWorkout, null, 4));
   if (lastWorkout) {
     document
       .querySelector("a[href='/exercise?']")
@@ -27,7 +27,6 @@ function tallyExercises(exercises) {
       acc.totalReps = (acc.totalReps || 0) + curr.reps;
     } else if (curr.type === "cardio") {
       acc.totalDistance = (acc.totalDistance || 0) + curr.distance;
-      acc.totalDuration = (acc.totalDuration || 0) + curr.duration;
     }
     return acc;
   }, {});
