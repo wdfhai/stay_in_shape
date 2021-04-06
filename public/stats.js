@@ -22,11 +22,12 @@ function generatePalette() {
 }
 
 function populateChart(data) {
-  console.log(data);
+  console.log('Data coming into populateChart is ' + JSON.stringify(data, null, 4));
 
   let durations = data.map(({ totalDuration }) => totalDuration);
-  console.log('durations are ' + durations)
+  console.log('durations array contains ' + durations)
   let pounds = calculateTotalWeight(data);
+  console.log('pounds array contains ' + pounds)
   let workouts = workoutNames(data);
   const colors = generatePalette();
 
