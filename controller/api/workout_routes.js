@@ -1,12 +1,18 @@
 const router = require('express').Router();
-const { Workout, Exercise } = require('../../model');
+const { Workout } = require('../../model');
 
 //for getLastWorkout()
 router.get("/", async (req,res) => {
-  const result = await Workout.find({})
+  const result = await Workout.aggregate([
+    { "$addFields": {
+        "totalDuration": {
+          "$sum": "$exercises.duration"
+        },
+    }},
+  ])
   .then(data => {
     res.json(data)
-    console.log("getLastWorkout with populate shows " + data)
+    console.log("getLastWorkout data shows " + JSON.stringify(data, null, 4))
   })
   .catch(err => {
     res.json(err);
@@ -16,7 +22,6 @@ router.get("/", async (req,res) => {
 
 //for getWorkoutsInRange()
 router.get("/range", async (req,res) => {
-
   const result = await Workout.aggregate([
     { "$addFields": {
         "totalDuration": {
@@ -30,7 +35,7 @@ router.get("/range", async (req,res) => {
   })
   .catch(err => {
     res.json(err);
-    console.log("getAllInRange data error shows " + err)
+    console.log("getAllInRange error shows " + err)
   })
 });
 
@@ -39,7 +44,7 @@ router.post("/", async (req, res) => {
   const result = await Workout.create({})
     .then(data => {
       res.json(data);
-      console.log("createWorkout data is " + data)
+      console.log("createWorkout data is " + JSON.stringify(data, null, 4))
     })
     .catch(err => {
       res.json(err);
@@ -49,17 +54,15 @@ router.post("/", async (req, res) => {
 
 // for 'addExercise(data)'
 router.put("/:id", async ({ body, params }, res) => {
-  console.log("line 50 says exercise data is " + JSON.stringify(body))
-
   const result = await Workout.findByIdAndUpdate({ "_id" : params.id}, { $push: { exercises: body  }})
-  .then(data => {
-    res.json(data);
-    console.log("addExerciseData result is " + data)
-  })
-  .catch(err => {
-    res.json(err);
-    console.log("eaddExerciseData error is " + err)
-  });
+    .then(data => {
+      res.json(data);
+      console.log("addExerciseData data is " + JSON.stringify(data, null, 4))
+    })
+    .catch(err => {
+      res.json(err);
+      console.log("addExerciseData error is " + err)
+    });
 })
 
 
