@@ -8,11 +8,31 @@ const WorkoutSchema = new Schema({
     default: Date.now
   },
   exercises: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Exercise"
-    }
-  ]
+    { 
+      type: {
+        type: String,
+        trim: true
+      },
+      name: {
+        type: String,
+        trim: true
+      },
+      distance: {
+        type: Number
+      },
+      duration: {
+        type: Number
+      },
+      weight: {
+        type: Number
+      },
+      reps: {
+        type: Number
+      },
+      sets: {
+        type: Number
+      }
+    }]
 });
 
 const Workout = mongoose.model("Workout", WorkoutSchema);

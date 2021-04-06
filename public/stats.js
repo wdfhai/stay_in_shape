@@ -24,12 +24,9 @@ function generatePalette() {
 function populateChart(data) {
   console.log(data);
 
-  let durations = data.map(({ totalDuration }) => totalDuration); //pulls duration data from back end
-  // let pounds = data.map(({ totalWeight }) => totalWeight);    //pulls weight data from back end
- 
-  // let durations = calculateTotalDuration(data); //pulls duration data from front end (enable function below)
-  let pounds = calculateTotalWeight(data);     //pulls weight data from front end (enable function below)
-
+  let durations = data.map(({ totalDuration }) => totalDuration);
+  console.log('durations are ' + durations)
+  let pounds = calculateTotalWeight(data);
   let workouts = workoutNames(data);
   const colors = generatePalette();
 
@@ -183,7 +180,7 @@ function calculateTotalWeight(data) {
   let totals = [];
 
   data.forEach((workout) => {
-    const workoutTotal = workout.exercises_details.reduce((total, { type, weight }) => {
+    const workoutTotal = workout.exercises.reduce((total, { type, weight }) => {
       if (type === 'resistance') {
         return total + weight;
       } else {
@@ -197,35 +194,16 @@ function calculateTotalWeight(data) {
   return totals;
 }
 
-// /////////////////
-// function calculateTotalDuration(data) {
-//   let dtotals = [];
-
-//   data.forEach((dworkout) => {
-//     const dworkoutTotal = dworkout.exercises.reduce((dtotal, { type, duration }) => {
-//       if (type === 'cardio') {
-//         return dtotal + duration;
-//       } else {
-//         return dtotal;
-//       }
-//     }, 0);
-
-//     dtotals.push(dworkoutTotal);
-//   });
-
-//   return dtotals;
-// }
-// ////////////////
 
 function workoutNames(data) {
   let workouts = [];
 
   data.forEach((workout) => {
-    workout.exercises_details.forEach((exercise) => {
+    workout.exercises.forEach((exercise) => {
       workouts.push(exercise.name);
     });
   });
-
+  console.log('workout names are ' + workouts)
   // return de-duplicated array with JavaScript `Set` object
   return [...new Set(workouts)];
 }

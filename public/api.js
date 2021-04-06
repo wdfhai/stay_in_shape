@@ -12,6 +12,7 @@ const API = {
 
     return json[json.length - 1];
   },
+  
   async addExercise(workoutData) {
     let a = JSON.stringify(workoutData)
     console.log('workoutData is' + a)
